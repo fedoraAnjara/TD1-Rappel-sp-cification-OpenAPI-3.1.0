@@ -9,5 +9,95 @@
     "url" : "https://virtserver.swaggerhub.com/HEIFEDORA3/LibraryManagement/1.0.0",
     "description" : "SwaggerHub API Auto Mocking"
   } ],
-  "components" : { }
+  "paths" : {
+    "/books" : {
+      "get" : {
+        "summary" : "Get a list of books",
+        "parameters" : [ {
+          "name" : "bookName",
+          "in" : "query",
+          "description" : "Filter books by name",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "releaseDateFrom",
+          "in" : "query",
+          "description" : "Start date for filtering books by release date",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "string",
+            "format" : "date"
+          }
+        }, {
+          "name" : "releaseDateTo",
+          "in" : "query",
+          "description" : "End date for filtering books by release date",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "string",
+            "format" : "date"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "List of books",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/Book"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "Book" : {
+        "required" : [ "author", "bookName" ],
+        "type" : "object",
+        "properties" : {
+          "ID" : {
+            "type" : "integer",
+            "description" : "Unique identifier for the book"
+          },
+          "bookName" : {
+            "type" : "string",
+            "description" : "Name of the book"
+          },
+          "author" : {
+            "type" : "string",
+            "description" : "Name of the author"
+          },
+          "pageNumbers" : {
+            "type" : "integer",
+            "description" : "Number of pages in the book"
+          },
+          "topic" : {
+            "type" : "string",
+            "description" : "The topic/genre of the book",
+            "enum" : [ "ROMANCE", "COMEDY", "OTHER" ]
+          },
+          "releaseDate" : {
+            "type" : "string",
+            "description" : "Release date of the book",
+            "format" : "date"
+          }
+        }
+      }
+    }
+  }
 }
