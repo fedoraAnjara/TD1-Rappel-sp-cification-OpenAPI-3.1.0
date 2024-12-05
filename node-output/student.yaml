@@ -1,0 +1,95 @@
+openapi: 3.0.0
+info:
+  title: home-iot-api
+  description: The API for the EatBacon IOT project
+  version: 1.0.0
+servers:
+- url: https://virtserver.swaggerhub.com/HEIFEDORA3/StudentManagement/1.0.0
+  description: SwaggerHub API Auto Mocking
+paths:
+  /Group:
+    get:
+      summary: Get a list of groups
+      parameters:
+      - name: groupName
+        in: query
+        description: Filter goup by name
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: promotion
+        in: query
+        description: Filter goup by promotion
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          format: string
+      responses:
+        "200":
+          description: List of groop
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Group'
+    put:
+      summary: Update an existing group
+      description: This request is idempotent.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Group'
+        required: true
+      responses:
+        "200":
+          description: group updated successfully
+    post:
+      summary: Add a new group
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Group'
+        required: true
+      responses:
+        "201":
+          description: group created successfully
+    delete:
+      summary: Delete a group
+      parameters:
+      - name: groupName
+        in: query
+        description: name of the group to delete
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      responses:
+        "204":
+          description: group deleted successfully
+components:
+  schemas:
+    Group:
+      required:
+      - groupName
+      - numberOfStudents
+      - promotion
+      - students
+      type: object
+      properties:
+        groupName:
+          type: string
+          description: Name of the group
+        promotion:
+          type: string
+          description: define the promotion of each group
+        numberOfStudents:
+          type: integer
+          description: number of students in one group
