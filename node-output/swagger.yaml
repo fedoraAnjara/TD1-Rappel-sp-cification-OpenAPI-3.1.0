@@ -118,6 +118,93 @@
           }
         }
       }
+    },
+    "/authors" : {
+      "get" : {
+        "summary" : "Get a list of authors",
+        "parameters" : [ {
+          "name" : "authorName",
+          "in" : "query",
+          "description" : "Filter authors by name",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "List of authors",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/Author"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put" : {
+        "summary" : "Update an existing author",
+        "description" : "This request is idempotent.",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Author"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Author updated successfully"
+          }
+        }
+      },
+      "post" : {
+        "summary" : "Add a new author",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Author"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Author created successfully"
+          }
+        }
+      },
+      "delete" : {
+        "summary" : "Delete an author",
+        "parameters" : [ {
+          "name" : "authorId",
+          "in" : "query",
+          "description" : "ID of the author to delete",
+          "required" : true,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "integer"
+          }
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "Author deleted successfully"
+          }
+        }
+      }
     }
   },
   "components" : {
@@ -133,24 +220,25 @@
           "bookName" : {
             "type" : "string",
             "description" : "Name of the book"
+          }
+        }
+      },
+      "Author" : {
+        "required" : [ "Name", "Sex" ],
+        "type" : "object",
+        "properties" : {
+          "ID" : {
+            "type" : "integer",
+            "description" : "Unique identifier for the author"
           },
-          "author" : {
+          "Name" : {
             "type" : "string",
             "description" : "Name of the author"
           },
-          "pageNumbers" : {
-            "type" : "integer",
-            "description" : "Number of pages in the book"
-          },
-          "topic" : {
+          "Sex" : {
             "type" : "string",
-            "description" : "The topic/genre of the book",
-            "enum" : [ "ROMANCE", "COMEDY", "OTHER" ]
-          },
-          "releaseDate" : {
-            "type" : "string",
-            "description" : "Release date of the book",
-            "format" : "date"
+            "description" : "Gender of the author",
+            "enum" : [ "M", "F" ]
           }
         }
       }
