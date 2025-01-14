@@ -1,0 +1,197 @@
+openapi: 3.0.0
+info:
+  title: Student Management
+  description: The API for the student management project
+  version: 1.1.0
+servers:
+- url: https://virtserver.swaggerhub.com/HEIFEDORA3/StudentManagement/1.1.0
+  description: SwaggerHub API Auto Mocking
+paths:
+  /Group:
+    get:
+      summary: Get a list of groups
+      parameters:
+      - name: groupName
+        in: query
+        description: Filter group by name
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: promotion
+        in: query
+        description: Filter group by promotion
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: List of groups
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Group'
+    put:
+      summary: Update an existing group
+      description: This request is idempotent.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Group'
+        required: true
+      responses:
+        "200":
+          description: Group updated successfully
+    post:
+      summary: Add a new group
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Group'
+        required: true
+      responses:
+        "201":
+          description: Group created successfully
+    delete:
+      summary: Delete a group
+      parameters:
+      - name: groupName
+        in: query
+        description: Name of the group to delete
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      responses:
+        "204":
+          description: Group deleted successfully
+  /students:
+    get:
+      summary: Get a list of students
+      operationId: getStudents
+      responses:
+        "200":
+          description: List of students
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Student'
+    put:
+      summary: Create or update students
+      operationId: createOrUpdateStudents
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Student'
+        required: true
+      responses:
+        "200":
+          description: List of created or updated students
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Student'
+    post:
+      summary: Create a new student
+      operationId: createStudents
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateStudent'
+        required: true
+      responses:
+        "201":
+          description: Student created successfully
+    delete:
+      summary: Delete students
+      operationId: deleteStudents
+      parameters:
+      - name: ids
+        in: query
+        description: List of student IDs to delete
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      responses:
+        "200":
+          description: List of deleted students
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Student'
+components:
+  schemas:
+    Group:
+      required:
+      - groupName
+      - numberOfStudents
+      - promotion
+      type: object
+      properties:
+        groupName:
+          type: string
+          description: Name of the group
+        promotion:
+          type: string
+          description: Define the promotion of each group
+        numberOfStudents:
+          type: integer
+          description: Number of students in one group
+        students:
+          type: array
+          items:
+            $ref: '#/components/schemas/Student'
+    Student:
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the student
+      allOf:
+      - $ref: '#/components/schemas/CreateStudent'
+    CreateStudent:
+      type: object
+      properties:
+        studentName:
+          type: string
+          description: Name of the student
+        studentSex:
+          type: string
+          description: Sex of the student
+          enum:
+          - MALE
+          - FEMALE
+        birthdate:
+          type: string
+          description: Birthdate of the student
+          format: date
+        studentReference:
+          type: string
+          description: Reference for the student
+        studentGroup:
+          type: string
+          description: Group to which the student belongs
+        address:
+          type: string
+          description: Address of the student
